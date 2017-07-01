@@ -5,6 +5,8 @@ import nltk
 from twingly_search import Client
 
 def do_twingly_search(search_terms):
+   # using the twingly api find related articles
+   # twinglyというAPIで記事を見つけよう
    client = Client(api_key='ECB40E2E-C91F-47AF-9F4D-5BAB7B755C78')
    result = client.execute_query(search_terms)
    for post in result.posts:
@@ -21,6 +23,8 @@ def strip_stop_words(tokens):
     return filter(lambda x: x.lower() not in stop_words, tokens)
 
 def tokenize_english(text):
+    # we only want nouns, so we tokenize and strip out everything else
+    # 名詞だけが必要だから他の言葉を消そう
     sent_text = nltk.sent_tokenize(text)
     nouns = []
     for sentence in sent_text:
@@ -32,6 +36,8 @@ def tokenize_english(text):
 
 
 def find_articles(text, lang):
+    # find the words we want to search with, and then search
+    # 興味がある言葉を見つけて、検索する
     if lang == 'en':
         tokens = tokenize_english(text)
     else:
@@ -42,11 +48,15 @@ def find_articles(text, lang):
     do_twingly_search(concatinated_terms)
 
 def main():
+    # get user input ユーザーの入力したことを読む
     user_input = str(raw_input(">>>"))
     print "lets find a blog!"
+
+    # get the language 言語を認める
     lang = detect_langs(user_input)[0].lang
     print user_input
     if lang in ['en', 'ja']:
+        # find articles 記事を見つけよう！
         find_articles(user_input, lang)
     else:
         print 'not supported :('
