@@ -10,7 +10,7 @@ def do_twingly_search(search_terms):
    client = Client(api_key='ECB40E2E-C91F-47AF-9F4D-5BAB7B755C78')
    result = client.execute_query(search_terms)
    for post in result.posts:
-       print post.url
+       print(post.url)
 
 def strip_stop_words(tokens):
     # english and japanese stop words are requires
@@ -30,7 +30,7 @@ def tokenize_english(text):
     for sentence in sent_text:
         tokenized_text = nltk.word_tokenize(sentence)
         tagged = nltk.pos_tag(tokenized_text)
-        print tagged
+        print(tagged)
         nouns += [w[0] for w in tagged if 'NN' in w[1]]
     return nouns
 
@@ -41,7 +41,7 @@ def find_articles(text, lang):
     if lang == 'en':
         tokens = tokenize_english(text)
     else:
-        print 'LEYS TOKENIZE JAPANESE!'
+        print('LEYS TOKENIZE JAPANESE!')
         tokens = []
 
     concatinated_terms = ' '.join(strip_stop_words(tokens))
@@ -49,17 +49,17 @@ def find_articles(text, lang):
 
 def main():
     # get user input ユーザーの入力を受け付ける
-    user_input = str(raw_input(">>>"))
-    print "lets find a blog!"
+    user_input = str(input(">>>"))
+    print("lets find a blog!")
 
     # get the language 言語を判定する
     lang = detect_langs(user_input)[0].lang
-    print user_input
+    print(user_input)
     if lang in ['en', 'ja']:
         # find articles 記事を見つけよう！
         find_articles(user_input, lang)
     else:
-        print 'not supported :('
+        print('not supported :(')
 
 if __name__ == '__main__':
     main()
