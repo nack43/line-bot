@@ -3,6 +3,7 @@
 from langdetect import detect_langs
 import nltk
 from twingly_search import Client
+import MeCab
 
 def do_twingly_search(search_terms):
    # using the twingly api find related articles
@@ -34,6 +35,17 @@ def tokenize_english(text):
         nouns += [w[0] for w in tagged if 'NN' in w[1]]
     return nouns
 
+# return array of nouns
+def tokenize_japanese(text):
+    tagger = MeCab.Tagger()
+    node = tagger.parseToNode(text)
+    nouns = []
+    while node:
+        if node.feature.split(',')[0] == '名詞':
+            nouns.append(node.surface)
+        node = node.next
+    print(nouns)
+    return nouns
 
 def find_articles(text, lang):
     # find the words we want to search with, and then search
@@ -42,7 +54,7 @@ def find_articles(text, lang):
         tokens = tokenize_english(text)
     else:
         print('LEYS TOKENIZE JAPANESE!')
-        tokens = []
+        tokens = tokenize_japanese(text)
 
     concatinated_terms = ' '.join(strip_stop_words(tokens))
     do_twingly_search(concatinated_terms)
