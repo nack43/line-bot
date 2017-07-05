@@ -5,13 +5,19 @@ import nltk
 from twingly_search import Client
 import MeCab
 
-def do_twingly_search(search_terms):
+def do_twingly_search(tokens, lang):
    # using the twingly api find related articles
    # twinglyというAPIで記事を見つけよう
+   search_terms = ' '.join(strip_stop_words(tokens))
    client = Client(api_key='ECB40E2E-C91F-47AF-9F4D-5BAB7B755C78')
-   result = client.execute_query(search_terms)
-   for post in result.posts:
+   q = client.query()
+   q.search_query = search_terms
+   q.language = lang 
+   result = client.execute_query(q).posts
+   result = sorted(result, key=lambda x: -x.blog_rank)[:100]
+   for post in result:
        print(post.url)
+       break
 
 def strip_stop_words(tokens):
     # english and japanese stop words are requires
@@ -56,8 +62,7 @@ def find_articles(text, lang):
         print('LEYS TOKENIZE JAPANESE!')
         tokens = tokenize_japanese(text)
 
-    concatinated_terms = ' '.join(strip_stop_words(tokens))
-    do_twingly_search(concatinated_terms)
+    do_twingly_search(tokens, lang)
 
 def main():
     # get user input ユーザーの入力を受け付ける
