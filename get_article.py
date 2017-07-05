@@ -52,11 +52,11 @@ def find_articles(text, lang):
     do_twingly_search(tokens, lang)
 
 def main():
-    # get user input ユーザーの入力したことを読む
+    # get user input ユーザーの入力を受け付ける
     user_input = str(raw_input(">>>"))
     print "lets find a blog!"
 
-    # get the language 言語を認める
+    # get the language 言語を判定する
     lang = detect_langs(user_input)[0].lang
     print user_input
     if lang in ['en', 'ja']:
