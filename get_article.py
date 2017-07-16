@@ -1,9 +1,11 @@
 # -*- coding: utf-8 -*-
-
+import hug
 from langdetect import detect_langs
 import nltk
 import MeCab
-
+from falcon import (
+    HTTP_400,
+)
 
 def strip_stop_words(tokens):
     # english and japanese stop words are requires
@@ -49,8 +51,34 @@ def find_articles(text, lang):
         tokens = tokenize_japanese(text)
 
     # now scrape google
-    # これからグーグルで検索しろう
+    # これからグーグルで検索しよう
 
+
+def get_message(body):
+    # parse send message out of JSON
+    # JSONから送ったことを取る
+    if 'events' in body:
+        if 'message' in body['events'][0]:
+            if 'text' in body['events'][0]['message']:
+                return body['events'][0]['message']['text']
+
+@hug.post('/blogsearch/1.0')
+def blog_search_post_endpoint_10(body, response = None):
+    # handle API call
+    # APIレクエストを処理する
+    message = get_message(body)
+    if message == None:
+        response.status = HTTP_400
+        # no message / 送ったことがない
+        return 'NO MESSAGE'
+    # get the language 言語を判定する
+    lang = detect_langs(message)[0].lang
+    if lang in ['en', 'ja']:
+        # find articles 記事を見つけよう！
+        articles = find_articles(message, lang)
+    else:
+        return 'language not supported'
+    return articles
 
 def main():
     # get user input ユーザーの入力を受け付ける
