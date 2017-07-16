@@ -2,22 +2,8 @@
 
 from langdetect import detect_langs
 import nltk
-from twingly_search import Client
 import MeCab
 
-def do_twingly_search(tokens, lang):
-   # using the twingly api find related articles
-   # twinglyというAPIで記事を見つけよう
-   search_terms = ' '.join(strip_stop_words(tokens))
-   client = Client(api_key='ECB40E2E-C91F-47AF-9F4D-5BAB7B755C78')
-   q = client.query()
-   q.search_query = search_terms
-   q.language = lang 
-   result = client.execute_query(q).posts
-   result = sorted(result, key=lambda x: -x.blog_rank)[:100]
-   for post in result:
-       print(post.url)
-       break
 
 def strip_stop_words(tokens):
     # english and japanese stop words are requires
@@ -38,7 +24,7 @@ def tokenize_english(text):
         tokenized_text = nltk.word_tokenize(sentence)
         tagged = nltk.pos_tag(tokenized_text)
         print(tagged)
-        nouns += [w[0] for w in tagged if 'NN' in w[1]]
+        nouns += [w[0] for w in tagged if 'NN' in w[1] or 'JJ' in w[1]]
     return nouns
 
 # return array of nouns
@@ -62,7 +48,9 @@ def find_articles(text, lang):
         print('LEYS TOKENIZE JAPANESE!')
         tokens = tokenize_japanese(text)
 
-    do_twingly_search(tokens, lang)
+    # now scrape google
+    # これからグーグルで検索しろう
+
 
 def main():
     # get user input ユーザーの入力を受け付ける
