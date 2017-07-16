@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-
+import hug
 from langdetect import detect_langs
 import nltk
 import MeCab
@@ -51,6 +51,33 @@ def find_articles(text, lang):
     # now scrape google
     # これからグーグルで検索しろう
 
+
+# sample data from line
+# ラインから送信されるデータフォーマットの例
+"""
+{
+  "events": [
+      {
+        "replyToken": "nHuyWiB7yP5Zw52FIkcQobQuGDXCTA",
+        "type": "message",
+        "timestamp": 1462629479859,
+        "source": {
+             "type": "user",
+             "userId": "U206d25c2ea6bd87c17655609a1c37cb8"
+         },
+         "message": {
+             "id": "325708",
+             "type": "text",
+             "text": "Hello, world"
+          }
+      }
+  ]
+}
+"""
+
+@hug.post('/blogsearch/1.0')
+def blog_search_post_endpoint_10(data, response=None):
+    print data
 
 def main():
     # get user input ユーザーの入力を受け付ける
