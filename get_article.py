@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
-
+import hug
 from langdetect import detect_langs
 import nltk
 import MeCab
-import requests
-from bs4 import BeautifulSoup
-import re
-from googleapiclient.discovery import build
+from falcon import (
+    HTTP_400,
+)
 import os
+from googleapiclient.discovery import build
 
 def strip_stop_words(tokens):
     # english and japanese stop words are requires
@@ -43,7 +43,7 @@ def tokenize_japanese(text):
     print(nouns)
     return nouns
 
-def tokenize(text, lang):
+def find_articles(text, lang):
     # find the words we want to search with, and then search
     # 興味がある言葉を見つけて、検索する
     if lang == 'en':
@@ -52,19 +52,45 @@ def tokenize(text, lang):
         print('LEYS TOKENIZE JAPANESE!')
         tokens = tokenize_japanese(text)
 
-    return tokens
     # now scrape google
     # これからグーグルで検索しよう
-    # 検索結果の一番上をreturnする
-def get_article(search_words):
-    search_words = ' '.join(search_words)
+    search_words = ' '.join(tokens)
     service = build('customsearch', 'v1', developerKey=os.environ['GOOGLE_API_KEY'])
+    # search via google custom search api
     res = service.cse().list(q = search_words, cx = os.environ['SEARCH_ENGINE_ID'],).execute()
+    # extract an article url
     for item in res['items']:
-        article = item['link']
+        article_url = item['link']
         break
-    print(article)
-    return article
+    print(article_url)
+    return article_url
+
+
+def get_message(body):
+    # parse send message out of JSON
+    # JSONから送ったことを取る
+    if 'events' in body:
+        if 'message' in body['events'][0]:
+            if 'text' in body['events'][0]['message']:
+                return body['events'][0]['message']['text']
+
+@hug.post('/blogsearch/1.0')
+def blog_search_post_endpoint_10(body, response = None):
+    # handle API call
+    # APIレクエストを処理する
+    message = get_message(body)
+    if message == None:
+        response.status = HTTP_400
+        # no message / 送ったことがない
+        return 'NO MESSAGE'
+    # get the language 言語を判定する
+    lang = detect_langs(message)[0].lang
+    if lang in ['en', 'ja']:
+        # find articles 記事を見つけよう！
+        articles = find_articles(message, lang)
+    else:
+        return 'language not supported'
+    return articles
 
 def main():
     # get user input ユーザーの入力を受け付ける
@@ -76,8 +102,7 @@ def main():
     print(user_input)
     if lang in ['en', 'ja']:
         # find articles 記事を見つけよう！
-        search_words = tokenize(user_input, lang)
-        get_article(search_words)
+        find_articles(user_input, lang)
     else:
         print('not supported :(')
 
