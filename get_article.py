@@ -3,6 +3,10 @@
 from langdetect import detect_langs
 import nltk
 import MeCab
+import requests
+from bs4 import BeautifulSoup
+import re
+from googleapiclient.discovery import build
 
 
 def strip_stop_words(tokens):
@@ -39,7 +43,7 @@ def tokenize_japanese(text):
     print(nouns)
     return nouns
 
-def find_articles(text, lang):
+def tokenize(text, lang):
     # find the words we want to search with, and then search
     # 興味がある言葉を見つけて、検索する
     if lang == 'en':
@@ -48,9 +52,19 @@ def find_articles(text, lang):
         print('LEYS TOKENIZE JAPANESE!')
         tokens = tokenize_japanese(text)
 
+    return tokens
     # now scrape google
-    # これからグーグルで検索しろう
-
+    # これからグーグルで検索しよう
+    # 検索結果の一番上をreturnする
+def get_article(search_words):
+    search_words = ' '.join(search_words)
+    service = build('customsearch', 'v1', developerKey='AIzaSyCmsYoipPi2vT5_joTCSrMNP18y3SoStbg')
+    res = service.cse().list(q = search_words, cx = '011332767987140581781:0ttwv7badhe',).execute()
+    for item in res['items']:
+        article = item['link']
+        break
+    print(article)
+    return article
 
 def main():
     # get user input ユーザーの入力を受け付ける
@@ -62,7 +76,8 @@ def main():
     print(user_input)
     if lang in ['en', 'ja']:
         # find articles 記事を見つけよう！
-        find_articles(user_input, lang)
+        search_words = tokenize(user_input, lang)
+        get_article(search_words)
     else:
         print('not supported :(')
 
