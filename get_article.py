@@ -7,7 +7,7 @@ import requests
 from bs4 import BeautifulSoup
 import re
 from googleapiclient.discovery import build
-
+import os
 
 def strip_stop_words(tokens):
     # english and japanese stop words are requires
@@ -58,8 +58,8 @@ def tokenize(text, lang):
     # 検索結果の一番上をreturnする
 def get_article(search_words):
     search_words = ' '.join(search_words)
-    service = build('customsearch', 'v1', developerKey='AIzaSyCmsYoipPi2vT5_joTCSrMNP18y3SoStbg')
-    res = service.cse().list(q = search_words, cx = '011332767987140581781:0ttwv7badhe',).execute()
+    service = build('customsearch', 'v1', developerKey=os.environ['GOOGLE_API_KEY'])
+    res = service.cse().list(q = search_words, cx = os.environ['SEARCH_ENGINE_ID'],).execute()
     for item in res['items']:
         article = item['link']
         break
