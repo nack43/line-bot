@@ -6,6 +6,8 @@ import MeCab
 from falcon import (
     HTTP_400,
 )
+import os
+from googleapiclient.discovery import build
 
 def strip_stop_words(tokens):
     # english and japanese stop words are requires
@@ -52,7 +54,16 @@ def find_articles(text, lang):
 
     # now scrape google
     # これからグーグルで検索しよう
-
+    search_words = ' '.join(tokens)
+    service = build('customsearch', 'v1', developerKey=os.environ['GOOGLE_API_KEY'])
+    # search via google custom search api
+    res = service.cse().list(q = search_words, cx = os.environ['SEARCH_ENGINE_ID'],).execute()
+    # extract an article url
+    for item in res['items']:
+        article_url = item['link']
+        break
+    print(article_url)
+    return article_url
 
 def get_message(body):
     # parse send message out of JSON

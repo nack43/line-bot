@@ -1,5 +1,7 @@
 appnope==0.1.0
 backports.shutil-get-terminal-size==1.0.0
+beautifulsoup4==4.6.0
+bs4==0.0.1
 certifi==2017.4.17
 chardet==3.0.4
 decorator==4.0.11
@@ -7,6 +9,8 @@ deprecation==1.0.1
 enum34==1.1.6
 falcon==1.2.0
 future==0.16.0
+google-api-python-client==1.6.2
+httplib2==0.10.3
 hug==2.3.0
 idna==2.5
 ipython==5.4.1
@@ -14,15 +18,19 @@ ipython-genutils==0.2.0
 langdetect==1.0.7
 mecab-python3==0.7
 nltk==3.2.4
+oauth2client==4.1.2
 pathlib2==2.3.0
 pexpect==4.2.1
 pickleshare==0.7.4
 prompt-toolkit==1.0.14
 ptyprocess==0.5.2
+pyasn1==0.2.3
+pyasn1-modules==0.0.9
 Pygments==2.2.0
 python-mimeparse==1.6.0
 pytz==2017.2
 requests==2.18.1
+rsa==3.4.2
 scandir==1.5
 simplegeneric==0.8.1
 six==1.10.0
