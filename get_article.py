@@ -65,7 +65,6 @@ def find_articles(text, lang):
     print(article_url)
     return article_url
 
-
 def get_message(body):
     # parse send message out of JSON
     # JSONから送ったことを取る
