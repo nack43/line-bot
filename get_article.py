@@ -73,6 +73,23 @@ def get_message(body):
             if 'text' in body['events'][0]['message']:
                 return body['events'][0]['message']['text']
 
+def natural_response(response, lang, article):
+    # turn the response into something more human
+    # 自然（話し言葉）な返事を作る
+    if response == 'nolang':
+        return 'sorry, I don\'t speak that language yet\n' +\
+               'ごめん、送ってくれたメッセージの言語がまだ分からない'
+    elif response == 'notfound':
+        if lang == 'en':
+            return 'I couldn\'t find any articles'
+        elif lang == 'ja':
+            return '記事を見つけてなかった'
+    elif response == 'found':
+        if lang == 'en':
+            return 'Check this out ' + article
+        elif lang == 'jp':
+            return 'どうぞ！' + article
+
 @hug.post('/blogsearch/1.0')
 def blog_search_post_endpoint_10(body, response = None):
     # handle API call
@@ -88,8 +105,11 @@ def blog_search_post_endpoint_10(body, response = None):
         # find articles 記事を見つけよう！
         articles = find_articles(message, lang)
     else:
-        return 'language not supported'
-    return articles
+        return natural_response('nolang', lang, '')
+    if articles != None and articles != []:
+        return natural_response('found', lang, articles[0])
+    else:
+        return natural_response('notfound', lang, '')
 
 def main():
     # get user input ユーザーの入力を受け付ける
