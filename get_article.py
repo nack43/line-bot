@@ -87,7 +87,7 @@ def natural_response(response, lang, article):
     elif response == 'found':
         if lang == 'en':
             return 'Check this out ' + article
-        elif lang == 'jp':
+        elif lang == 'ja':
             return 'どうぞ！' + article
 
 @hug.post('/blogsearch/1.0')
