@@ -43,7 +43,7 @@ def tokenize_japanese(text):
     print(nouns)
     return nouns
 
-def find_articles(text, lang):
+def find_article(text, lang):
     # find the words we want to search with, and then search
     # 興味がある言葉を見つけて、検索する
     if lang == 'en':
@@ -73,6 +73,23 @@ def get_message(body):
             if 'text' in body['events'][0]['message']:
                 return body['events'][0]['message']['text']
 
+def natural_response(response, lang, article):
+    # turn the response into something more human
+    # 自然（話し言葉）な返事を作る
+    if response == 'nolang':
+        return 'sorry, I don\'t speak that language yet\n' +\
+               'ごめん、送ってくれたメッセージの言語がまだ分からない'
+    elif response == 'notfound':
+        if lang == 'en':
+            return 'I couldn\'t find any articles'
+        elif lang == 'ja':
+            return '記事を見つけてなかった'
+    elif response == 'found':
+        if lang == 'en':
+            return 'Check this out ' + article
+        elif lang == 'ja':
+            return 'どうぞ！' + article
+
 @hug.post('/blogsearch/1.0')
 def blog_search_post_endpoint_10(body, response = None):
     # handle API call
@@ -86,24 +103,13 @@ def blog_search_post_endpoint_10(body, response = None):
     lang = detect_langs(message)[0].lang
     if lang in ['en', 'ja']:
         # find articles 記事を見つけよう！
-        articles = find_articles(message, lang)
+        article = find_article(message, lang)
     else:
-        return 'language not supported'
-    return articles
+        return natural_response('nolang', lang, '')
 
-def main():
-    # get user input ユーザーの入力を受け付ける
-    user_input = str(input(">>>"))
-    print("lets find a blog!")
-
-    # get the language 言語を判定する
-    lang = detect_langs(user_input)[0].lang
-    print(user_input)
-    if lang in ['en', 'ja']:
-        # find articles 記事を見つけよう！
-        find_articles(user_input, lang)
+    # reply / 返事する
+    if article != None:
+        return natural_response('found', lang, article)
     else:
-        print('not supported :(')
+        return natural_response('notfound', lang, '')
 
-if __name__ == '__main__':
-    main()
