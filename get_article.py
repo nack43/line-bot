@@ -43,7 +43,7 @@ def tokenize_japanese(text):
     print(nouns)
     return nouns
 
-def find_articles(text, lang):
+def find_article(text, lang):
     # find the words we want to search with, and then search
     # 興味がある言葉を見つけて、検索する
     if lang == 'en':
@@ -103,27 +103,15 @@ def blog_search_post_endpoint_10(body, response = None):
     lang = detect_langs(message)[0].lang
     if lang in ['en', 'ja']:
         # find articles 記事を見つけよう！
-        articles = find_articles(message, lang)
+        article = find_article(message, lang)
     else:
         return natural_response('nolang', lang, '')
-    if articles != None and articles != []:
-        return natural_response('found', lang, articles[0])
+
+    # reply / 返事する
+    if article != None:
+        return natural_response('found', lang, article)
     else:
         return natural_response('notfound', lang, '')
-
-def main():
-    # get user input ユーザーの入力を受け付ける
-    user_input = str(input(">>>"))
-    print("lets find a blog!")
-
-    # get the language 言語を判定する
-    lang = detect_langs(user_input)[0].lang
-    print(user_input)
-    if lang in ['en', 'ja']:
-        # find articles 記事を見つけよう！
-        find_articles(user_input, lang)
-    else:
-        print('not supported :(')
 
 if __name__ == '__main__':
     main()
