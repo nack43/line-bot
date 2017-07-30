@@ -8,6 +8,9 @@ from falcon import (
 )
 import os
 from googleapiclient.discovery import build
+import json
+import requests
+
 
 def strip_stop_words(tokens):
     # english and japanese stop words are requires
