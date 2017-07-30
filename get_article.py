@@ -8,6 +8,9 @@ from falcon import (
 )
 import os
 from googleapiclient.discovery import build
+import json
+import requests
+
 
 def strip_stop_words(tokens):
     # english and japanese stop words are requires
@@ -49,7 +52,6 @@ def find_article(text, lang):
     if lang == 'en':
         tokens = tokenize_english(text)
     else:
-        print('LEYS TOKENIZE JAPANESE!')
         tokens = tokenize_japanese(text)
 
     # now scrape google
@@ -73,6 +75,13 @@ def get_message(body):
             if 'text' in body['events'][0]['message']:
                 return body['events'][0]['message']['text']
 
+def get_reply_token(body):
+    # parse send message out of JSON
+    # JSONから送ったことを取る
+    if 'events' in body:
+        if 'reply_token' in body['events'][0]:
+            return body['events'][0]['reply_token']
+
 def natural_response(response, lang, article):
     # turn the response into something more human
     # 自然（話し言葉）な返事を作る
@@ -90,11 +99,29 @@ def natural_response(response, lang, article):
         elif lang == 'ja':
             return 'どうぞ！' + article
 
+def send_response(reply_token, text):
+    header = {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer " + os.environ['LINE_CHANNEL_TOKEN']
+    }
+    payload = {
+          "replyToken":reply_token,
+          "messages":[
+                {
+                    "type":"text",
+                    "text": text
+                }
+            ]
+    }
+    requests.post('https://api.line.me/v2/bot/message/reply',
+                  headers=header, data=json.dumps(payload))
+
 @hug.post('/blogsearch/1.0')
 def blog_search_post_endpoint_10(body, response = None):
     # handle API call
     # APIレクエストを処理する
     message = get_message(body)
+    reply_token = get_reply_token(body)
     if message == None:
         response.status = HTTP_400
         # no message / 送ったことがない
@@ -105,11 +132,14 @@ def blog_search_post_endpoint_10(body, response = None):
         # find articles 記事を見つけよう！
         article = find_article(message, lang)
     else:
-        return natural_response('nolang', lang, '')
+        if reply_token != None:
+            send_response(reply_token, natural_response('nolang', lang, ''))
 
     # reply / 返事する
     if article != None:
-        return natural_response('found', lang, article)
+        if reply_token != None:
+            send_response(reply_token, natural_response('found', lang, article))
     else:
-        return natural_response('notfound', lang, '')
+        if reply_token != None:
+            send_response(reply_token, natural_response('notfound', lang, ''))
 
