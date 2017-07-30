@@ -113,5 +113,3 @@ def blog_search_post_endpoint_10(body, response = None):
     else:
         return natural_response('notfound', lang, '')
 
-if __name__ == '__main__':
-    main()
