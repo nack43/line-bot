@@ -79,8 +79,8 @@ def get_reply_token(body):
     # parse send message out of JSON
     # JSONから送ったことを取る
     if 'events' in body:
-        if 'reply_token' in body['events'][0]:
-            return body['events'][0]['reply_token']
+        if 'replyToken' in body['events'][0]:
+            return body['events'][0]['replyToken']
 
 def natural_response(response, lang, article):
     # turn the response into something more human
@@ -134,6 +134,7 @@ def blog_search_post_endpoint_10(body, response = None):
     else:
         if reply_token != None:
             send_response(reply_token, natural_response('nolang', lang, ''))
+        return
 
     # reply / 返事する
     if article != None:
