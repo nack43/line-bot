@@ -9,31 +9,31 @@ from nlp import (
 class TestStripStopWords(unittest.TestCase):
 
     def test_remove_english_stopwords(self):
-        query = ['I',  'Blog', 'Article' 'You']
+        query = ['I',  'Blog', 'Article', 'You']
 
         result = strip_stop_words(query)
 
         self.assertNotEqual(None, result)
-        self.assetEqual(len(result), 0)
-        self.assertEqual(resut, []) # should also strip whitespace
+        self.assertEqual(len(result), 0)
+        self.assertEqual(result, []) # should also strip whitespace
 
     def test_strip_sample_english_sentence(self):
-        query = ['I', 'blog' 'dogs']
+        query = ['I', 'blog', 'dogs']
 
         result = strip_stop_words(query)
 
         self.assertNotEqual(None, result)
-        self.assetEqual(len(result), 1)
-        self.assertEqual(resut[0], 'dogs') # should also strip whitespace
+        self.assertEqual(len(result), 1)
+        self.assertEqual(result[0], 'dogs') # should also strip whitespace
 
-    def test_strip_japanese_sentence(self):
-        query = [u'私', u'ブロク', u'記事', u'俺']
+    def test_strip_japanese_stopwords(self):
+        query = [u'私', u'ブログ', u'記事', u'俺']
 
         result = strip_stop_words(query)
 
         self.assertNotEqual(None, result)
-        self.assetEqual(len(result), 0)
-        self.assertEqual(resut, []) # should also strip whitespace
+        self.assertEqual(len(result), 0)
+        self.assertEqual(result, []) # should also strip whitespace
 
     def test_strip_japanese_sentence(self):
         query = [u'私', u'犬', u'記事']
@@ -41,8 +41,8 @@ class TestStripStopWords(unittest.TestCase):
         result = strip_stop_words(query)
 
         self.assertNotEqual(None, result)
-        self.assetEqual(len(result), 1)
-        self.assertEqual(resut, [u'犬']) # should also strip whitespace
+        self.assertEqual(len(result), 1)
+        self.assertEqual(result, [u'犬']) # should also strip whitespace
         
 
 #class TestTokenizeEnglish(unittest.TestCase):

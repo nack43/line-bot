@@ -6,8 +6,8 @@ def strip_stop_words(tokens):
     # english and japanese stop words are requires
     stop_words = ['i', 'you', 'blog', 'article',
                   u'私', u'俺', u'記事', u'ブログ']
-
-    return filter(lambda x: x.lower() not in stop_words, tokens)
+    processed = list(filter(lambda x: x.lower() not in stop_words, tokens))
+    return processed
 
 
 def tokenize_english(text):
