@@ -1,8 +1,49 @@
 import unittest
-from nlp import strip_stop_words, tokenize_english, tokenize_japanese, natural_response
+from nlp import (
+    strip_stop_words,
+    tokenize_english,
+    tokenize_japanese,
+    natural_response
+)
 
-#class TestStripStopWords(unittest.TestCase):
+class TestStripStopWords(unittest.TestCase):
 
+    def test_remove_english_stopwords(self):
+        query = ['I',  'Blog', 'Article' 'You']
+
+        result = strip_stop_words(query)
+
+        self.assertNotEqual(None, result)
+        self.assetEqual(len(result), 0)
+        self.assertEqual(resut, []) # should also strip whitespace
+
+    def test_strip_sample_english_sentence(self):
+        query = ['I', 'blog' 'dogs']
+
+        result = strip_stop_words(query)
+
+        self.assertNotEqual(None, result)
+        self.assetEqual(len(result), 1)
+        self.assertEqual(resut[0], 'dogs') # should also strip whitespace
+
+    def test_strip_japanese_sentence(self):
+        query = [u'私', u'ブロク', u'記事', u'俺']
+
+        result = strip_stop_words(query)
+
+        self.assertNotEqual(None, result)
+        self.assetEqual(len(result), 0)
+        self.assertEqual(resut, []) # should also strip whitespace
+
+    def test_strip_japanese_sentence(self):
+        query = [u'私', u'犬', u'記事']
+
+        result = strip_stop_words(query)
+
+        self.assertNotEqual(None, result)
+        self.assetEqual(len(result), 1)
+        self.assertEqual(resut, [u'犬']) # should also strip whitespace
+        
 
 #class TestTokenizeEnglish(unittest.TestCase):
 
@@ -11,6 +52,7 @@ from nlp import strip_stop_words, tokenize_english, tokenize_japanese, natural_r
 
 
 class TestNaturalResponse(unittest.TestCase):
+
     def test_nolang(self):
         actual = natural_response('nolang', 'cn', 'http://test.com')
         self.assertEqual(actual, 'sorry, I don\'t speak that language yet\n')
