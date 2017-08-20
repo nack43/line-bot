@@ -45,10 +45,46 @@ class TestStripStopWords(unittest.TestCase):
         self.assertEqual(result, [u'犬']) # should also strip whitespace
         
 
-#class TestTokenizeEnglish(unittest.TestCase):
+class TestTokenizeEnglish(unittest.TestCase):
 
+    def test_simple_english_sentence(self):
+        sentence = 'the cat jumped over the dog'
 
-#class TestTokenizeJapanese(unittest.TestCase):
+        nouns = tokenize_english(sentence)
+
+        self.assertNotEqual(nouns, None)
+        self.assertEqual(nouns[0], 'cat')
+        self.assertEqual(nouns[1], 'dog')
+
+    def test_example_blog_query(self):
+        sentence = 'I want to read a blog about haskell'
+
+        nouns = tokenize_english(sentence)
+
+        self.assertNotEqual(nouns, None)
+        self.assertEqual(nouns[0], 'blog')
+        self.assertEqual(nouns[1], 'haskell')
+
+class TestTokenizeJapanese(unittest.TestCase):
+
+    def test_simple_english_sentence(self):
+        sentence = u'猫は犬の上に飛びました'
+
+        nouns = tokenize_english(sentence)
+
+        self.assertNotEqual(nouns, None)
+        self.assertEqual(nouns[0], '猫')
+        self.assertEqual(nouns[1], '犬')
+
+    def test_example_blog_query(self):
+        sentence = u'僕は居酒屋についての記事を見つけてもらえませんか？'
+
+        nouns = tokenize_english(sentence)
+
+        self.assertNotEqual(nouns, None)
+        self.assertEqual(nouns[0], u'僕')
+        self.assertEqual(nouns[1], u'居酒屋')
+        self.assertEqual(nouns[2], u'記事')
 
 
 class TestNaturalResponse(unittest.TestCase):

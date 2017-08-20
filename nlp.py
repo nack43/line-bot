@@ -25,10 +25,11 @@ def tokenize_english(text):
 def tokenize_japanese(text):
     tagger = MeCab.Tagger()
     node = tagger.parseToNode(text)
+    print(node)
     nouns = []
     while node:
         if node.feature.split(',')[0] == '名詞':
-            nous.append(node.surface)
+            nouns.append(node.surface)
         node = node.next
     print(nouns)
     return nouns
