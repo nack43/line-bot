@@ -34,6 +34,7 @@ jobs:
            sudo apt-get install mecab libmecab-dev mecab-ipadic
            sudo apt-get install python-mecab
            pip install -r requirements.txt
+           python -c "import nltk; nltk.download('all')"
 
       - save_cache:
           paths:
