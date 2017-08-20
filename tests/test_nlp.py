@@ -70,7 +70,7 @@ class TestTokenizeJapanese(unittest.TestCase):
     def test_simple_english_sentence(self):
         sentence = u'猫は犬の上に飛びました'
 
-        nouns = tokenize_english(sentence)
+        nouns = tokenize_japanese(sentence)
 
         self.assertNotEqual(nouns, None)
         self.assertEqual(nouns[0], '猫')
@@ -79,7 +79,7 @@ class TestTokenizeJapanese(unittest.TestCase):
     def test_example_blog_query(self):
         sentence = u'僕は居酒屋についての記事を見つけてもらえませんか？'
 
-        nouns = tokenize_english(sentence)
+        nouns = tokenize_japanese(sentence)
 
         self.assertNotEqual(nouns, None)
         self.assertEqual(nouns[0], u'僕')
