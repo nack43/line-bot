@@ -31,6 +31,8 @@ jobs:
          command: |
            python3 -m venv venv
            . venv/bin/activate
+           sudo apt-get install mecab libmecab-dev mecab-ipadic
+           sudo apt-get install python-mecab
            pip install -r requirements.txt
 
       - save_cache:
