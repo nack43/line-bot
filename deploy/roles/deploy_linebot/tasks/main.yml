@@ -1,0 +1,19 @@
+---
+
+- name: pull down git repo
+
+- name: make venv
+
+- name: install venv
+
+- name: install mecab
+
+- name: install nltk
+
+- name: install init.d file from templates
+
+- name: install nginx config file from templates
+
+- name: configure environment file from vault (this needs to be set up)
+
+- name: restart init.d service

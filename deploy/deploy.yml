@@ -1,0 +1,7 @@
+---
+
+-   hosts:
+    -   linebot_production
+    roles:
+    -   {role: deploy_linebot} 
+
