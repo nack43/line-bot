@@ -1,4 +1,5 @@
 appnope==0.1.0
+ansible
 backports.shutil-get-terminal-size==1.0.0
 beautifulsoup4==4.6.0
 bs4==0.0.1
