@@ -33,7 +33,7 @@ jobs:
            . venv/bin/activate
            sudo apt-get install mecab libmecab-dev mecab-ipadic
            sudo apt-get install python-mecab
-           sudo aptitude install mecab-ipadic-utf8
+           sudo apt-get install mecab-ipadic-utf8
            pip install -r requirements.txt
            python -c "import nltk; nltk.download('all')"
 
