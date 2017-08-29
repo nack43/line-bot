@@ -29,7 +29,7 @@ def tokenize_japanese(text):
     nouns = []
     while node:
         if node.feature.split(',')[0] == u'名詞':
-            word = nouns.append(node.feature.split(',')[-3])
+            word = node.feature.split(',')[-3]
             nouns.append(word)
         node = node.next
     print(nouns)
