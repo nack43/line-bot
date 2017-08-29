@@ -17,8 +17,8 @@ def tokenize_english(text):
     for sentence in sent_text:
         tokenized_text = nltk.word_tokenize(sentence)
         tagged = nltk.pos_tag(tokenized_text)
-        print(tagged)
         nouns += [w[0] for w in tagged if 'NN' in w[1] or 'JJ' in w[1]]
+        print(nouns)
     return nouns
 
 # return array of nouns
@@ -28,7 +28,7 @@ def tokenize_japanese(text):
     nouns = []
     while node:
         if node.feature.split(',')[0] == '名詞':
-            nous.append(node.surface)
+            nouns.append(node.surface)
         node = node.next
     print(nouns)
     return nouns
