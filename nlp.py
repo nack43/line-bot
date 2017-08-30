@@ -6,8 +6,8 @@ def strip_stop_words(tokens):
     # english and japanese stop words are requires
     stop_words = ['i', 'you', 'blog', 'article',
                   u'私', u'俺', u'記事', u'ブログ']
-
-    return filter(lambda x: x.lower() not in stop_words, tokens)
+    processed = list(filter(lambda x: x.lower() not in stop_words, tokens))
+    return processed
 
 
 def tokenize_english(text):
@@ -25,10 +25,12 @@ def tokenize_english(text):
 def tokenize_japanese(text):
     tagger = MeCab.Tagger()
     node = tagger.parseToNode(text)
+    print(node)
     nouns = []
     while node:
-        if node.feature.split(',')[0] == '名詞':
-            nouns.append(node.surface)
+        if node.feature.split(',')[0] == u'名詞':
+            word = node.feature.split(',')[-3]
+            nouns.append(word)
         node = node.next
     print(nouns)
     return nouns
