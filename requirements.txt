@@ -14,7 +14,7 @@ gunicorn==19.7.1
 httplib2==0.10.3
 hug==2.3.0
 idna==2.5
-ipython==5.4.1
+ipython==7.16.3
 ipython-genutils==0.2.0
 langdetect==1.0.7
 mecab-python3==0.7
